@@ -2,22 +2,21 @@ import heapq
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv("6.csv", header=0)
-name = list(df["nickname"])
-teams = list(df["team_name"])
-total_kills = list(df["killing_score"])
-assists = list(df["assists"])
-damages = list(df["damage"])
-kills = list(df["kills"])
-med_kit = list(df["medkit_use"])
-team_mates_revived = list(df["revive_teammate_times"])
-knock_down = list(df["knock_down"])
-headshots = list(df["headshots"])
-grenades = list(df["grenade_use"])
-survival_time = list(df["survival_time"])
+
+def get_info_from_file(path, word):
+    df = pd.read_csv(path, header=0)
+    return list(df[word])
 
 
-def maximum(items, word):
+def get_name_from_file(path):
+    df = pd.read_csv(path, header=0)
+    return list(df["nickname"])
+
+
+def maximum(path, word):
+
+    items = get_info_from_file(path, word)
+    name = get_name_from_file(path)
 
     object_sing = "content"
     if word == "kills":
@@ -26,15 +25,15 @@ def maximum(items, word):
         object_sing = "asitencias"
     elif word == "damage":
         object_sing = "daño"
-    elif word == "medkit":
+    elif word == "medkit_use":
         object_sing = "botiquines usados"
-    elif word == "revived":
+    elif word == "revive_teammate_times":
         object_sing = "compañeros revividos"
     elif word == "knock_down":
         object_sing = "derribos"
     elif word == "headshots":
         object_sing = "disparos a la cabeza"
-    elif word == "grenade":
+    elif word == "grenade_use":
         object_sing = "granadas desplegadas"
 
     max_item = heapq.nlargest(3, zip(items, name))
@@ -54,9 +53,11 @@ def maximum(items, word):
                                   names[2], achievements[2], object_sing))
 
 
-def minimum(items):
-
+def minimum(path, word):
     object_sing = "tiempo de supervivencia"
+
+    items = get_info_from_file(path, word)
+    name = get_name_from_file(path)
 
     # heapq.nlowest
     min_item = min(items)
@@ -73,7 +74,8 @@ def minimum(items):
         print("{} es el jugador con menos {}, en total {} segundos .\n".format(containers[0], object_sing, min_item))
 
 
-def get_one_item_for_teams(item):
+def get_one_item_for_teams(path, word):
+    item = get_info_from_file(path, word)
     item_new = []
     for a in range(48):
         if a % 4 == 0:
@@ -83,7 +85,8 @@ def get_one_item_for_teams(item):
     return item_new
 
 
-def get_sum_item_for_teams(item):
+def get_sum_item_for_teams(path, word):
+    item = get_info_from_file(path, word)
     e = 0
     f = 4
     item_total = []
@@ -95,15 +98,15 @@ def get_sum_item_for_teams(item):
     return item_total
 
 
-def teams_statistics():
+def teams_statistics(path):
     # Sacando una tabla de los 12 equipos
-    teams_new = get_one_item_for_teams(teams)
+    teams_new = get_one_item_for_teams(path, "team_name")
 
     # Sacando las kills totales por cada equipo
-    total_kills_list = get_one_item_for_teams(total_kills)
+    total_kills_list = get_one_item_for_teams(path, "killing_score")
 
     # Obteniendo el equipo com mas daño
-    damage_total_list = get_sum_item_for_teams(damages)
+    damage_total_list = get_sum_item_for_teams(path, "damage")
 
     # Daño máximo de partida
     highest_damages_teams = heapq.nlargest(3, zip(damage_total_list, teams_new))
@@ -118,37 +121,43 @@ def main():
     titulo = "DATOS POR JUGADORES, ELIGIENDO LOS MEJORES 3"
     print("\n" + titulo + "\n" + "-" * len(titulo) + "\n")
 
+    day = input("Ingresa el numero de jornada que se juega: ")
+
+    name = input("Ingresa el numero de partida que quieres concer: ")
+
+    path = ".\\partidas\\Jornada_" + day + "\\" + name + ".csv"
+
     # Jugador con menos tiempo de supervivencia
-    minimum(survival_time)
+    minimum(path, "survival_time")
     # Jugador con mas granadas desplegadas
-    maximum(grenades, "grenade")
+    maximum(path, "grenade_use")
 
     # Jugador con mas disparos a la cabeza
-    maximum(headshots, "headshots")
+    maximum(path, "headshots")
 
     # Jugador con mas derribos
-    maximum(knock_down, "knock_down")
+    maximum(path, "knock_down")
 
     # Jugador que mas revivio
-    maximum(team_mates_revived, "revived")
+    maximum(path, "revive_teammate_times")
 
     # El jugador con mas botiquines usados
-    maximum(med_kit, "medkit")
+    maximum(path, "medkit_use")
 
     # Sacando el jugador con más kills
-    maximum(kills, "kills")
+    maximum(path, "kills")
 
     # Sacando el jugador con más daño
-    maximum(damages, "damage")
+    maximum(path, "damage")
 
     # Sacando el jugador con más asistencias
-    maximum(assists, "assists")
+    maximum(path, "assists")
 
     titulo = "DATOS POR EQUIPOS"
     print("\n" + titulo + "\n" + "-" * len(titulo) + "\n")
 
     # Sacando estadísticas de los equipos en conjunto
-    teams_statistics()
+    teams_statistics(path)
 
 
 if __name__ == "__main__":

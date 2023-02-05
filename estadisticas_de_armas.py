@@ -19,12 +19,12 @@ def statistics_for_weapon(weapon_usages, word):
     return weapon_name, kills_weapon
 
 
-def get_statistics_for_day(path, word):
+def get_statistics_for_day(path, word, day):
     weapon_name_final = []
     item_weapon_final = []
     maps_number = 6
     for a in range(1, maps_number + 1):
-        path_file = path + str(a) + ".csv"
+        path_file = path + "Jornada_" + day + "\\" + str(a) + ".csv"
         df = pd.read_csv(path_file, header=0)
         weapon_usages = list(df["weapon_usages"])
         weapon_name, item_weapon = statistics_for_weapon(weapon_usages, word)
@@ -52,14 +52,16 @@ def main():
         print("Escoge de nuevo")
         choice = input("¿Deseas hacer de [T]odos los archivos o solo [U]no?: ")
 
+    day = input("Ingrese el numero de jornada que se juega: ")
+
     if choice in ["T", "t"]:
-        get_statistics_for_day(path, "kills")
-        get_statistics_for_day(path, "damage")
-        get_statistics_for_day(path, "headshots")
+        get_statistics_for_day(path, "kills", day)
+        get_statistics_for_day(path, "damage", day)
+        get_statistics_for_day(path, "headshots", day)
 
     elif choice in ["U", "u"]:
         name = input("Ingresa el número de partida que quieres conocer: ")
-        path_file = path + name + ".csv"
+        path_file = path + "Jornada_" + day + "\\" + name + ".csv"
         df = pd.read_csv(path_file, header=0)
         weapon_usages = list(df["weapon_usages"])
         get_statistics_for_game(weapon_usages, "kills")

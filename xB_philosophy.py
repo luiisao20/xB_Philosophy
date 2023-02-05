@@ -183,7 +183,8 @@ def main_philosophy(path_file):
     return list_score, positions
 
 
-def get_xbooyah_per_day(path, name_list, xbooyah_list):
+def get_xbooyah_per_day(path, name_list, xbooyah_list, day):
+    path += "Jornada_" + day + "\\"
     maps_number = 6
     for a in range(1, maps_number + 1):
         path_file = path + str(a) + ".csv"
@@ -206,9 +207,9 @@ def get_xbooyah_per_day(path, name_list, xbooyah_list):
     print(f"{maxim_xbooyah[2][0]:.2f}\n")
 
 
-def get_xbooyah_per_game(path):
+def get_xbooyah_per_game(path, day):
     name = input("Ingresa el numero de la partida: ")
-    path_file = path + name + ".csv"
+    path_file = path + "Jornada_" + day + "\\" + name + ".csv"
     main_philosophy(path_file)
 
 
@@ -216,10 +217,12 @@ def get_max_xbooyah(choice, path):
     name_list = []
     xbooyah_list = []
     if choice in ["t", "T"]:
-        get_xbooyah_per_day(path, name_list, xbooyah_list)
+        day = input("Ingresa el numero de la jornada que se juega: ")
+        get_xbooyah_per_day(path, name_list, xbooyah_list, day)
 
     elif choice in ["u", "U"]:
-        get_xbooyah_per_game(path)
+        day = input("Ingresa el numero de la jornada que se juega: ")
+        get_xbooyah_per_game(path, day)
 
 
 def main():
