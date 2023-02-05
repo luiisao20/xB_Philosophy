@@ -184,7 +184,8 @@ def main_philosophy(path_file):
 
 
 def get_xbooyah_per_day(path, name_list, xbooyah_list):
-    for a in range(1, 9):
+    maps_number = 6
+    for a in range(1, maps_number + 1):
         path_file = path + str(a) + ".csv"
         print("Partida {}".format(a))
         list_score, positions = main_philosophy(path_file)

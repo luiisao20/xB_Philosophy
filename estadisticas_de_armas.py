@@ -22,8 +22,8 @@ def statistics_for_weapon(weapon_usages, word):
 def get_statistics_for_day(path, word):
     weapon_name_final = []
     item_weapon_final = []
-
-    for a in range(1, 9):
+    maps_number = 6
+    for a in range(1, maps_number + 1):
         path_file = path + str(a) + ".csv"
         df = pd.read_csv(path_file, header=0)
         weapon_usages = list(df["weapon_usages"])

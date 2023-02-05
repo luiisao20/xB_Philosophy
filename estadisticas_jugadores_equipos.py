@@ -2,7 +2,7 @@ import heapq
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv("data_partida.csv", header=0)
+df = pd.read_csv("6.csv", header=0)
 name = list(df["nickname"])
 teams = list(df["team_name"])
 total_kills = list(df["killing_score"])
@@ -46,7 +46,7 @@ def maximum(items, word):
         achievements.append(item[0])
         index += 1
 
-    print("Los 3 jugadores con mas {} son:\n"
+    print("Los 3 jugadores con más {} son:\n"
           "{} con {} {}\n"
           "{} con {} {}\n"
           "{} con {} {}\n".format(object_sing, names[0], achievements[0], object_sing,
