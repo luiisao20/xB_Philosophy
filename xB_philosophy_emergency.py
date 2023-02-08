@@ -65,6 +65,7 @@ def get_sum_item_for_teams(item):
 
 
 def get_statistics_for_best_teams(item, teams_new, positions):
+
     statistics_teams = item
 
     statistic_total_list = [[statistics_teams[teams_new.index(positions[0][1])], positions[0][1]],
@@ -111,8 +112,15 @@ def xb_score(revived_total_list, damage_for_bests_teams, kills_for_bests_teams, 
 
 
 def xb_philosophy(score_list, teams_new, damage_total_list, total_kills_list, revived_times,
-                  assists, survival_time, choice):
+                  assists, survival_time, choice, game, day):
+
     positions = heapq.nlargest(3, zip(score_list, teams_new))
+
+    if game == 3 and int(day) == 2:
+        positions = [(12, 'MOVISTAR R7'), (9, 'ALL GLORY'), (8, 'Janús Esport')]
+        if choice == 1:
+            positions = [(12, 'MOVISTAR R7'), (9, 'ALL GLORY'), (8, 'Janús Esport')]
+
     if choice == 1:
         pass
     else:
@@ -139,7 +147,7 @@ def xb_philosophy(score_list, teams_new, damage_total_list, total_kills_list, re
     return list_score, positions
 
 
-def main_philosophy(path_file, choice):
+def main_philosophy(path_file, choice, game, day):
     df = pd.read_csv(path_file, header=0)
     teams = list(df["team_name"])
     total_kills = list(df["killing_score"])
@@ -168,20 +176,21 @@ def main_philosophy(path_file, choice):
         print("\n" + titulo + "\n" + "-" * len(titulo) + "\n")
 
     list_score, positions = xb_philosophy(score_list, teams_new, damage_total_list, total_kills_list,
-                                          revived_times, assists, survival_time, choice)
+                                          revived_times, assists, survival_time, choice, game, day)
     return list_score, positions
 
 
 def get_xbooyah_per_day(path, name_list, xbooyah_list, day, choice):
     path += day + "\\"
     maps_number = 6
-    for a in range(1, maps_number + 1):
-        path_file = path + str(a) + ".csv"
+    for game in range(1, maps_number + 1):
+        path_file = path + str(game) + ".csv"
         if choice == 1:
             pass
         else:
-            print("Partida {}".format(a))
-        list_score, positions = main_philosophy(path_file, choice)
+            print("Partida {}".format(game))
+
+        list_score, positions = main_philosophy(path_file, choice, game, day)
 
         for index in range(0, 3):
             if positions[index][1].lower() in name_list:
@@ -199,9 +208,9 @@ def get_xbooyah_per_day(path, name_list, xbooyah_list, day, choice):
 
 
 def get_xbooyah_per_game(path, day):
-    name = input("Ingresa el numero de la partida: ")
-    path_file = path + day + "\\" + name + ".csv"
-    main_philosophy(path_file, 0)
+    game = input("Ingresa el numero de la partida: ")
+    path_file = path + day + "\\" + game + ".csv"
+    main_philosophy(path_file, 0, int(game), day)
 
 
 def print_best_three_teams(maxim_booyah):
@@ -231,7 +240,7 @@ def get_xbooyah_per_triple_day(path):
             else:
                 name_list_3.append(maxim_booyah[index][1])
                 xbooyah_list_3.append(maxim_booyah[index][0])
-
+        print('jornada ', day_2)
     maxim_booyah_triple_day = heapq.nlargest(3, zip(xbooyah_list_3, name_list_3))
 
     print_best_three_teams(maxim_booyah_triple_day)

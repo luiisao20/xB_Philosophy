@@ -118,17 +118,18 @@ def teams_statistics(path):
 
 
 def main():
-    titulo = "DATOS POR JUGADORES, ELIGIENDO LOS MEJORES 3"
+    titulo = "DATOS POR JUGADORES, ELIGIENDO LOS MEJORES 3 JORNADA 2"
     print("\n" + titulo + "\n" + "-" * len(titulo) + "\n")
 
-    day = input("Ingresa el numero de jornada que se juega: ")
+    # day = input("Ingresa el numero de jornada que se juega: ")
 
     name = input("Ingresa el numero de partida que quieres concer: ")
 
-    path = ".\\partidas\\Jornada_" + day + "\\" + name + ".csv"
+    path = ".\\partidas\\Jornada_2" + "\\" + name + ".csv"
 
     # Jugador con menos tiempo de supervivencia
     minimum(path, "survival_time")
+
     # Jugador con mas granadas desplegadas
     maximum(path, "grenade_use")
 

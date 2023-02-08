@@ -52,7 +52,7 @@ def main():
         print("Escoge de nuevo")
         choice = input("¿Deseas hacer de [T]odos los archivos o solo [U]no?: ")
 
-    day = input("Ingrese el numero de jornada que se juega: ")
+    day = '2'  # Jornada 2
 
     if choice in ["T", "t"]:
         get_statistics_for_day(path, "kills", day)
